@@ -1,0 +1,46 @@
+version: '3.9'
+
+# Dependency Order
+# mq
+# httpserv
+# obse
+# imed
+# orig
+
+services:
+
+  mq:
+    build: mq/.
+
+  orig:
+    build: orig/.
+    depends_on:
+      imed:
+        condition: service_healthy
+
+  imed:
+    build: imed/.
+    depends_on:
+      obse:
+        condition: service_healthy
+
+  obse:
+    build: obse/.
+    volumes:
+      - message_log:/logs
+    depends_on:
+      httpserv:
+        condition: service_healthy
+
+  httpserv:
+    build: httpserv/.
+    volumes:
+      - message_log:/logs
+    ports:
+      - 8080:3000
+    depends_on:
+      mq:
+        condition: service_healthy
+
+volumes:
+  message_log:
