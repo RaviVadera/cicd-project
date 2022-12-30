@@ -5,12 +5,6 @@ docker pull gitlab/gitlab-runner:v15.7.1
 
 ## Setup Gitlab and Runner
 
-0. Clone the project repo | Make sure you are in home dir
-```bash
-cd ~
-git clone <url> project
-```
-
 0. Setup Docker mirror for pull-through cache and to avoid rate limiting by docker hub
 ```bash
 docker run -d -p 8999:5000 -e REGISTRY_PROXY_REMOTEURL=https://registry-1.docker.io --restart always --name registry registry:2
@@ -32,7 +26,7 @@ Use docker ps to check the status until it reports health check -> healthy
 
 3. Start Gitlab Runner Container
 ```bash
-docker run -d --name gitlab-runner --restart always --volume $GITLAB_RUNNER_HOME/config:/etc/gitlab-runner --volume /var/run/docker.sock:/var/run/docker.sock --volume project/daemon.json:/opt/docker/daemon.json gitlab/gitlab-runner:v15.7.1
+docker run -d --name gitlab-runner --restart always --volume $GITLAB_RUNNER_HOME/config:/etc/gitlab-runner --volume /var/run/docker.sock:/var/run/docker.sock gitlab/gitlab-runner:v15.7.1
 ```
 
 4. Navigate to localhost:8080 in browser
@@ -51,7 +45,7 @@ docker exec -it gitlab grep 'Password:' /etc/gitlab/initial_root_password
 13. Go to Settings -> CI / CD -> Scroll to Runners -> Click on Expand
 14. Register the Runner | Use the registration token from above step | Use the hostname you used in url option | Use 172.17.0.1 if you used localhost as hostname
 ```bash
-docker exec -it gitlab-runner gitlab-runner register --non-interactive --executor "docker" --docker-image ubuntu:20.04 --docker-volumes /var/run/docker.sock:/var/run/docker.sock /opt/docker/daemon.json:/etc/docker/daemon.json:ro --url "http://<host_name>:8000/" --clone-url "http://<host_name>:8000/" --registration-token <registration_token> --description "self-hosted-runner" --tag-list "docker,self-hosted" --run-untagged="true" --locked="false" --access-level="not_protected"
+docker exec -it gitlab-runner gitlab-runner register --non-interactive --executor "docker" --docker-image ubuntu:20.04 --docker-volumes /var/run/docker.sock:/var/run/docker.sock --docker-volumes /opt/docker/daemon.json:/etc/docker/daemon.json:ro --url "http://<host_name>:8000/" --clone-url "http://<host_name>:8000/" --registration-token <registration_token> --description "self-hosted-runner" --tag-list "docker,self-hosted" --run-untagged="true" --locked="false" --access-level="not_protected"
 ```
 15. Verify runner is registered | Go to Settings -> CI / CD -> Scroll to Runners -> Click on Expand | The runner should show up
 
