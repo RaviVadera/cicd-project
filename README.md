@@ -4,12 +4,6 @@ docker pull gitlab/gitlab-ce:15.7.0-ce.0
 docker pull gitlab/gitlab-runner:v15.7.1
 
 ## Setup Gitlab and Runner
-
-0. Setup Docker mirror for pull-through cache and to avoid rate limiting by docker hub
-```bash
-docker run -d -p 8999:5000 -e REGISTRY_PROXY_REMOTEURL=https://registry-1.docker.io --restart always --name registry registry:2
-```
-
 1. Create necessary directories for volume mapping
 ```bash
 mkdir gitlab-data
@@ -18,7 +12,8 @@ mkdir gitlab-runner
 export GITLAB_RUNNER_HOME=~/gitlab-runner
 ```
 
-2. Start Gitlab Container | To avoid conflicts with existing port mappings use 8XXX series ports
+2. Start Gitlab Container
+    - To avoid conflicts with existing port mappings use 8XXX series ports
 ```bash
 docker run -d -p 8000:80 -p 8443:443 -p 8022:22 --hostname <host_name> --name gitlab --restart always --volume $GITLAB_HOME/config:/etc/gitlab --volume $GITLAB_HOME/logs:/var/log/gitlab --volume $GITLAB_HOME/data:/var/opt/gitlab --shm-size 256m gitlab/gitlab-ce:15.7.0-ce.0
 ```
@@ -30,7 +25,8 @@ docker run -d --name gitlab-runner --restart always --volume $GITLAB_RUNNER_HOME
 ```
 
 4. Navigate to localhost:8080 in browser
-5. Register as a new user -> The user needs approval from admin before logging-in
+5. Register as a new user
+    - The user needs approval from admin before logging-in
 6. Retrieve password for admin
 ```bash
 docker exec -it gitlab grep 'Password:' /etc/gitlab/initial_root_password
@@ -43,11 +39,17 @@ docker exec -it gitlab grep 'Password:' /etc/gitlab/initial_root_password
 11. Login with registered user
 12. Create a new project
 13. Go to Settings -> CI / CD -> Scroll to Runners -> Click on Expand
-14. Register the Runner | Use the registration token from above step | Use the hostname you used in url option | Use 172.17.0.1 if you used localhost as hostname
+14. Register the Runner
+    - Use the registration token from above step
+    - Use the hostname you used in url option
+    - Use 172.17.0.1 if you used localhost as hostname
+    - IMPORTANT: There is a security issue when using if-not-present pull policy, if some malicious image has been tagged with the required image, nd things can happen. However, considering the implementation for couse project, setting up the registry mirror is an overkill.
 ```bash
 docker exec -it gitlab-runner gitlab-runner register --non-interactive --executor "docker" --docker-image ubuntu:20.04 --docker-volumes /var/run/docker.sock:/var/run/docker.sock --docker-pull-policy if-not-present --url "http://<host_name>:8000/" --clone-url "http://<host_name>:8000/" --registration-token <registration_token> --description "self-hosted-runner" --tag-list "docker,self-hosted" --run-untagged="true" --locked="false" --access-level="not_protected"
 ```
-15. Verify runner is registered | Go to Settings -> CI / CD -> Scroll to Runners -> Click on Expand | The runner should show up
+15. Verify runner is registered
+    - Go to Settings -> CI / CD -> Scroll to Runners -> Click on Expand
+    - The runner should show up
 
 ## Create Pipeline
 
