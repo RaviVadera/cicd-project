@@ -45,7 +45,7 @@ docker exec -it gitlab grep 'Password:' /etc/gitlab/initial_root_password
 13. Go to Settings -> CI / CD -> Scroll to Runners -> Click on Expand
 14. Register the Runner | Use the registration token from above step | Use the hostname you used in url option | Use 172.17.0.1 if you used localhost as hostname
 ```bash
-docker exec -it gitlab-runner gitlab-runner register --non-interactive --executor "docker" --docker-image ubuntu:20.04 --docker-volumes /var/run/docker.sock:/var/run/docker.sock --docker-volumes /opt/docker/daemon.json:/etc/docker/daemon.json:ro --url "http://<host_name>:8000/" --clone-url "http://<host_name>:8000/" --registration-token <registration_token> --description "self-hosted-runner" --tag-list "docker,self-hosted" --run-untagged="true" --locked="false" --access-level="not_protected"
+docker exec -it gitlab-runner gitlab-runner register --non-interactive --executor "docker" --docker-image ubuntu:20.04 --docker-volumes /var/run/docker.sock:/var/run/docker.sock --docker-pull-policy if-not-present --url "http://<host_name>:8000/" --clone-url "http://<host_name>:8000/" --registration-token <registration_token> --description "self-hosted-runner" --tag-list "docker,self-hosted" --run-untagged="true" --locked="false" --access-level="not_protected"
 ```
 15. Verify runner is registered | Go to Settings -> CI / CD -> Scroll to Runners -> Click on Expand | The runner should show up
 
