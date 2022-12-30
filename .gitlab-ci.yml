@@ -21,11 +21,7 @@ stages:
 
 job-build:
   stage: build
-  before_script:
-    - *setup_node
   script:
-    - ls -la
-    - node -v
     - echo "Building..."
 
 job-test:
@@ -34,8 +30,9 @@ job-test:
   before_script:
     - *setup_node
   script:
-    - ls -la
-    - node -v
+    - cd gateway
+    - npm ci
+    - npm test
     - echo "Testing..."
 
 job-deploy:
