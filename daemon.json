@@ -1,5 +1,8 @@
 {
-    "registry-mirrors": [
-      "http://172.17.0.1:8999"
-    ]
-  }
+  "registry-mirrors": [
+    "http://172.17.0.1:8999"
+  ],
+  "insecure-registries": [
+    "http://172.17.0.1:8999"
+  ]
+}

@@ -42,5 +42,6 @@ job-deploy:
   script:
     - ls -la
     - echo "Deploying..."
+    - cat /etc/docker/daemon.json
     - docker info
     - docker compose up -d
