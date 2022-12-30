@@ -43,7 +43,7 @@ docker exec -it gitlab grep 'Password:' /etc/gitlab/initial_root_password
     - Use the registration token from above step
     - Use the hostname you used in url option
     - Use 172.17.0.1 if you used localhost as hostname
-    - IMPORTANT: There is a security issue when using if-not-present pull policy, if some malicious image has been tagged with the required image, nd things can happen. However, considering the implementation for couse project, setting up the registry mirror is an overkill.
+    - IMPORTANT: There is a security issue when using if-not-present pull policy, if some malicious image has been tagged with the required image, nd things can happen. However, considering the implementation for couse project, setting up the registry mirror is an overkill. [Reference](https://about.gitlab.com/blog/2020/10/30/mitigating-the-impact-of-docker-hub-pull-requests-limits/)
 ```bash
 docker exec -it gitlab-runner gitlab-runner register --non-interactive --executor "docker" --docker-image ubuntu:20.04 --docker-volumes /var/run/docker.sock:/var/run/docker.sock --docker-pull-policy if-not-present --url "http://<host_name>:8000/" --clone-url "http://<host_name>:8000/" --registration-token <registration_token> --description "self-hosted-runner" --tag-list "docker,self-hosted" --run-untagged="true" --locked="false" --access-level="not_protected"
 ```
