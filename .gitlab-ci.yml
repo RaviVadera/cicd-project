@@ -7,27 +7,30 @@ stages:
 job-setup:
   stage: setup
   script:
-    - apt update
-    - apt -y full-upgrade
-    - apt -y install curl
+    - apt-get update
+    - apt-get -y full-upgrade
+    - apt-get -y install curl
     - curl -fsSL https://deb.nodesource.com/setup_16.x | bash - 
-    - apt install -y nodejs
+    - apt-get install -y nodejs
 
 
 job-build:
   stage: build
   script:
     - ls -la
+    - node -v
     - echo "Building..."
 
 job-test:
   stage: test
   script:
     - ls -la
+    - node -v
     - echo "Testing..."
 
 job-deploy:
   stage: deploy
   script:
     - ls -la
+    - node -v
     - echo "Deploying..."
