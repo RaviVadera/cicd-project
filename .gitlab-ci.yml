@@ -9,6 +9,7 @@ job-setup:
   script:
     - apt update
     - apt -y full-upgrade
+    - apt -y install curl
     - curl -fsSL https://deb.nodesource.com/setup_16.x | bash - 
     - apt install -y nodejs
 
