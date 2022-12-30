@@ -23,9 +23,7 @@ job-build:
   stage: build
   before_script:
     - *setup_node
-    - *setup_docker_cli
   script:
-    - docker info
     - ls -la
     - node -v
     - echo "Building..."
@@ -42,7 +40,10 @@ job-test:
 
 job-deploy:
   stage: deploy
+  before_script:
+    - *setup_docker_cli
   needs: [job-test]
   script:
     - ls -la
     - echo "Deploying..."
+    - docker compose up -d
