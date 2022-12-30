@@ -42,4 +42,5 @@ job-deploy:
   script:
     - ls -la
     - echo "Deploying..."
+    - docker info
     - docker compose up -d
