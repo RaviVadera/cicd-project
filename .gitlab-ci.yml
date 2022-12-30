@@ -33,5 +33,4 @@ job-deploy:
   stage: deploy
   script:
     - ls -la
-    - node -v
     - echo "Deploying..."
