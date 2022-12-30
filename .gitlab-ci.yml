@@ -3,12 +3,12 @@ stages:
   - test
   - deploy
 
-.setup_node: &setup_node
-  - apt-get update
-  - apt-get -y full-upgrade
-  - apt-get -y install ca-certificates curl
-  - curl -fsSL https://deb.nodesource.com/setup_16.x | bash - 
-  - apt-get install -y nodejs
+# .setup_node: &setup_node
+#   - apt-get update
+#   - apt-get -y full-upgrade
+#   - apt-get -y install ca-certificates curl
+#   - curl -fsSL https://deb.nodesource.com/setup_16.x | bash - 
+#   - apt-get install -y nodejs
 
 .setup_docker_cli: &setup_docker_cli
   - apt-get update
@@ -27,8 +27,7 @@ job-build:
 job-test:
   stage: test
   needs: [job-build]
-  before_script:
-    - *setup_node
+  image: node:16
   script:
     - cd gateway
     - npm ci
