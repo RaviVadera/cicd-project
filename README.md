@@ -38,14 +38,13 @@ docker exec -it gitlab grep 'Password:' /etc/gitlab/initial_root_password
 11. Login with registered user
 12. Create a new project
 13. Go to Settings -> CI / CD -> Scroll to Runners -> Click on Expand
-14. Register the Runner | Use the registration token from above step | Use the hostname you used in url option
+14. Register the Runner | Use the registration token from above step | Use the hostname you used in url option | Use 172.17.0.1 if you used localhost as hostname
 ```bash
-docker exec -it gitlab-runner gitlab-runner register --non-interactive --executor "docker" --docker-image ubuntu:20.04 --url "http://<host_name>:8000/" --registration-token <registration_token> --description "self-hosted-runner" --tag-list "docker,self-hosted" --run-untagged="true" --locked="false" --access-level="not_protected"
+docker exec -it gitlab-runner gitlab-runner register --non-interactive --executor "docker" --docker-image ubuntu:20.04 --url "http://<host_name>:8000/" --clone-url "http://<host_name>:8000/" --registration-token <registration_token> --description "self-hosted-runner" --tag-list "docker,self-hosted" --run-untagged="true" --locked="false" --access-level="not_protected"
 ```
 15. Verify runner is registered | Go to Settings -> CI / CD -> Scroll to Runners -> Click on Expand | The runner should show up
 
 ## Create Pipeline
-1. Make sure your runner is registered 
 
 ## Information about host
 Linux 2d82d88fccd6 5.10.102.1-microsoft-standard-WSL2 #1 SMP Wed Mar 2 00:30:59 UTC 2022 x86_64 GNU/Linux  
