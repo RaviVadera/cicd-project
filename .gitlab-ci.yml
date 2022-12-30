@@ -16,6 +16,7 @@ job-build:
   before_script:
     - *setup_node
   script:
+    - docker info
     - ls -la
     - node -v
     - echo "Building..."
