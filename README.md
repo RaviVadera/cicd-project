@@ -42,6 +42,10 @@ docker exec -it gitlab grep 'Password:' /etc/gitlab/initial_root_password
 ```bash
 docker exec -it gitlab-runner gitlab-runner register --non-interactive --executor "docker" --docker-image ubuntu:20.04 --url "http://<host_name>:8000/" --registration-token <registration_token> --description "self-hosted-runner" --tag-list "docker,self-hosted" --run-untagged="true" --locked="false" --access-level="not_protected"
 ```
+15. Verify runner is registered | Go to Settings -> CI / CD -> Scroll to Runners -> Click on Expand | The runner should show up
+
+## Create Pipeline
+1. Make sure your runner is registered 
 
 ## Information about host
 Linux 2d82d88fccd6 5.10.102.1-microsoft-standard-WSL2 #1 SMP Wed Mar 2 00:30:59 UTC 2022 x86_64 GNU/Linux  
