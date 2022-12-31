@@ -8,7 +8,7 @@ export const State = Object.freeze({
   SHUTDOWN: 'SHUTDOWN',
 });
 
-const messageLogPath = path.join('/logs', 'state.log');
+const messageLogPath = path.join('/logs', 'state.current');
 
 export const StateManager = {
   getState: () => {

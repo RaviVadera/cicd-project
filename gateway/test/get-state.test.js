@@ -9,7 +9,7 @@ describe('/state', () => {
 
   beforeEach(() => {
     mock({
-      '/logs/state.log': Buffer.from(State.RUNNING),
+      '/logs/state.current': Buffer.from(State.RUNNING),
     });
   });
 
