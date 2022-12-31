@@ -33,6 +33,17 @@ app.get('/state', async (req, res) => {
 });
 
 // TODO return state change log
+app.get('/run-log', async (req, res) => {
+  try {
+    const stateLog = StateManager.getStateLog();
+    res.header('Content-Type', 'text/plain; charset=utf-8');
+    return res.send(stateLog).end();
+  } catch (error) {
+    console.log(error);
+    return res.status(502).end();
+  }
+});
+
 // TODO return rabbitmq statistics
 // TODO return rabbitmq queue statistics
 

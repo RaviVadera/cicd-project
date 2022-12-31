@@ -8,13 +8,17 @@ export const State = Object.freeze({
   SHUTDOWN: 'SHUTDOWN',
 });
 
-const messageLogPath = path.join('/logs', 'state.current');
+const currentStatePath = path.join('/logs', 'state.current');
+const stateLogPath = path.join('/logs', 'state.log');
 
 export const StateManager = {
   getState: () => {
-    return fs.readFileSync(messageLogPath, { encoding: 'utf-8' }).toString();
+    return fs.readFileSync(currentStatePath, { encoding: 'utf-8' }).toString();
   },
   setState: (state) => {
-    fs.writeFileSync(messageLogPath, state);
+    fs.writeFileSync(currentStatePath, state);
+  },
+  getStateLog: () => {
+    return fs.readFileSync(stateLogPath, { encoding: 'utf-8' }).toString();
   },
 };
