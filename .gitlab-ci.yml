@@ -20,9 +20,10 @@ job-build:
 job-test:
   stage: test
   needs: [job-build]
-  image: node:16.19.0
+  image: node:16
   script:
     - cd gateway
+    - env | grep -i node
     - npm ci
     - echo "Testing..."
     - npm test
