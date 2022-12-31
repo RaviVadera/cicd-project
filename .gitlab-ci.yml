@@ -40,7 +40,5 @@ job-deploy:
     - *setup_docker_cli
   needs: [job-test]
   script:
-    - ls -la
     - echo "Deploying..."
-    - docker info
-    - docker compose up -d
+    - docker-compose up -d --build
