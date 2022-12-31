@@ -4,8 +4,8 @@ const app = express();
 
 // TODO return the messages entries from HTTPSERV
 app.get('/messages', (req, res) => {
-    res.header('Content-Type', 'text/plain; charset=utf-8');
-    res.send('Hello World!');
+  res.header('Content-Type', 'text/plain; charset=utf-8');
+  res.send('Hello World!');
 });
 
 // TODO update the state
