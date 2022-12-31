@@ -23,7 +23,6 @@ job-test:
   image: node:16
   script:
     - cd gateway
-    - env | grep -i node
     - npm ci
     - echo "Testing..."
     - npm test

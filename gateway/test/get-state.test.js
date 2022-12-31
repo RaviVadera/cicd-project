@@ -1,4 +1,4 @@
-import { expect, beforeAll, afterAll, test } from '@jest/globals';
+import { expect, beforeEach, afterEach, test } from '@jest/globals';
 import request from 'supertest';
 import app from '../gateway';
 import { State } from '../state-manager';
@@ -7,13 +7,13 @@ import mock from 'mock-fs';
 describe('/state', () => {
   const expectedContent = State.RUNNING;
 
-  beforeAll(() => {
+  beforeEach(() => {
     mock({
       '/logs/state.log': Buffer.from(State.RUNNING),
     });
   });
 
-  afterAll(() => {
+  afterEach(() => {
     mock.restore();
   });
 
