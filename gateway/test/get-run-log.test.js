@@ -14,7 +14,7 @@ describe('/run-log', () => {
 
   beforeEach(() => {
     mock({
-      '/logs/state.log': Buffer.from(State.RUNNING),
+      '/logs/state.log': Buffer.from(expectedContent),
     });
   });
 
