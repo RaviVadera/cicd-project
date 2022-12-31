@@ -4,6 +4,9 @@
   "description": "",
   "type": "module",
   "main": "index.js",
+  "bin": {
+    "orig": "bin/orig.mjs"
+  },
   "scripts": {
     "start": "node ."
   },

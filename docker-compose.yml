@@ -47,8 +47,7 @@ services:
     ports:
       - 8083:3000
     depends_on:
-      orig:
-        condition: service_healthy
+      - orig
 
 volumes:
   message_log:
