@@ -1,14 +1,20 @@
-import { jest, expect, beforeAll, test } from '@jest/globals';
+import { expect, beforeAll, afterAll, test } from '@jest/globals';
 import request from 'supertest';
 import app from '../gateway';
-import { State, StateManager } from '../state-manager';
+import { State } from '../state-manager';
+import mock from 'mock-fs';
 
 describe('/state', () => {
   const expectedContent = State.RUNNING;
 
   beforeAll(() => {
-    StateManager.getState = jest.fn();
-    StateManager.getState.mockReturnValue(expectedContent);
+    mock({
+      '/logs/state.log': Buffer.from(State.RUNNING),
+    });
+  });
+
+  afterAll(() => {
+    mock.restore();
   });
 
   test('/state endpoint should be available', async () => {
