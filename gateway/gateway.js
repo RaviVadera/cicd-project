@@ -1,5 +1,6 @@
 import axios from 'axios';
 import express from 'express';
+import { StateManager } from './state-manager';
 
 const app = express();
 const messagesHost = 'http://httpserv:3000';
@@ -20,6 +21,17 @@ app.get('/messages', async (req, res) => {
 
 // TODO update the state
 // TODO return the current state
+app.get('/state', async (req, res) => {
+  try {
+    const currentState = StateManager.getState();
+    res.header('Content-Type', 'text/plain; charset=utf-8');
+    return res.send(currentState).end();
+  } catch (error) {
+    console.log(error);
+    return res.status(502).end();
+  }
+});
+
 // TODO return state change log
 // TODO return rabbitmq statistics
 // TODO return rabbitmq queue statistics
