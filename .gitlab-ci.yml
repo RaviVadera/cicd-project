@@ -34,4 +34,4 @@ job-deploy:
   needs: [job-test]
   script:
     - echo "Deploying..."
-    - docker compose up -d --build
+    - docker compose up -d --build --wait
