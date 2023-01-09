@@ -4,7 +4,7 @@ import app from '../gateway';
 import { State } from '../state-manager';
 import mock from 'mock-fs';
 
-describe('/state', () => {
+describe('GET /state', () => {
   const expectedContent = State.RUNNING;
 
   beforeEach(() => {
