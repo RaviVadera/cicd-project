@@ -1,6 +1,6 @@
 import axios from 'axios';
 import express from 'express';
-import { StateManager } from './state-manager.js';
+import { State, StateManager } from './state-manager.js';
 
 const app = express();
 const messagesHost = 'http://httpserv:3000';
@@ -18,7 +18,7 @@ app.get('/messages', async (req, res) => {
     });
     return res.send(serviceResponse.data).end();
   } catch (error) {
-    return res.status(502).end();
+    return res.status(500).end();
   }
 });
 
@@ -27,12 +27,21 @@ app.put('/state', async (req, res) => {
   try {
     const newState = req.body;
     if (!newState) return res.status(400).send().end();
-    StateManager.setState(newState);
-    res.header('Content-Type', 'text/plain; charset=utf-8');
-    return res.send().end();
+    const knownStates = Object.values(State);
+    if (!knownStates.includes(newState)) return res.status(400).send().end();
+    const currentState = StateManager.getState();
+    if (currentState === newState) {
+      res.header('Content-Type', 'text/plain; charset=utf-8');
+      return res.send().end();
+    } else {
+      // TODO execute tasks for new state
+      StateManager.setState(newState);
+      res.header('Content-Type', 'text/plain; charset=utf-8');
+      return res.send().end();
+    }
   } catch (error) {
     console.log(error);
-    return res.status(502).end();
+    return res.status(500).end();
   }
 });
 
@@ -44,7 +53,7 @@ app.get('/state', async (req, res) => {
     return res.send(currentState).end();
   } catch (error) {
     console.log(error);
-    return res.status(502).end();
+    return res.status(500).end();
   }
 });
 
@@ -56,7 +65,7 @@ app.get('/run-log', async (req, res) => {
     return res.send(stateLog).end();
   } catch (error) {
     console.log(error);
-    return res.status(502).end();
+    return res.status(500).end();
   }
 });
 
