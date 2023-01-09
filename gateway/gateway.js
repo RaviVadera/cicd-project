@@ -1,9 +1,12 @@
 import axios from 'axios';
 import express from 'express';
-import { StateManager } from './state-manager';
+import { StateManager } from './state-manager.js';
 
 const app = express();
 const messagesHost = 'http://httpserv:3000';
+
+//app.use(bodyParserErrorHandler());
+app.use(express.text());
 
 // TODO return the messages entries from HTTPSERV
 app.get('/messages', async (req, res) => {
@@ -20,6 +23,19 @@ app.get('/messages', async (req, res) => {
 });
 
 // TODO update the state
+app.put('/state', async (req, res) => {
+  try {
+    const newState = req.body;
+    if (!newState) return res.status(400).send().end();
+    StateManager.setState(newState);
+    res.header('Content-Type', 'text/plain; charset=utf-8');
+    return res.send().end();
+  } catch (error) {
+    console.log(error);
+    return res.status(502).end();
+  }
+});
+
 // TODO return the current state
 app.get('/state', async (req, res) => {
   try {
