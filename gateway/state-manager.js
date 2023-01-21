@@ -24,7 +24,7 @@ export const StateManager = {
           // maybe define http interface between all containers
           // i.e. POST /_start | POST /_stop
           // and call apis for all containers to start
-          setTimeout(() => setState(State.RUNNING), 1000);
+          setTimeout(() => StateManager.setState(State.RUNNING), 1000);
           break;
 
         case State.RUNNING:
