@@ -16,7 +16,7 @@ export const StateManager = {
     return fs.readFileSync(currentStatePath, { encoding: 'utf-8' }).toString();
   },
   setState: (state) => {
-    if (getState() !== state) {
+    if (StateManager.getState() !== state) {
       // TODO perform state changes
       switch (state) {
         case State.INIT:
@@ -45,7 +45,6 @@ export const StateManager = {
 
       fs.writeFileSync(currentStatePath, state);
       const stateLogEntry = `${new Date().toISOString()}: ${state}\n`;
-      console.log(stateLogEntry.trim());
       // append state entry to file
       fs.appendFileSync(stateLogPath, stateLogEntry);
     }
