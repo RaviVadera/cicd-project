@@ -16,7 +16,39 @@ export const StateManager = {
     return fs.readFileSync(currentStatePath, { encoding: 'utf-8' }).toString();
   },
   setState: (state) => {
-    fs.writeFileSync(currentStatePath, state);
+    if (getState() !== state) {
+      // TODO perform state changes
+      switch (state) {
+        case State.INIT:
+          // TODO start all containers ??
+          // maybe define http interface between all containers
+          // i.e. POST /_start | POST /_stop
+          // and call apis for all containers to start
+          setTimeout(() => setState(State.RUNNING), 1000);
+          break;
+
+        case State.RUNNING:
+          // TODO call ORIG api to start sending messages
+          break;
+
+        case State.PAUSED:
+          // TODO call ORIG api to stop sending messages
+          break;
+
+        case State.SHUTDOWN:
+          // TODO stop all containers ??
+          // maybe define http interface between all containers
+          // i.e. POST /_start | POST /_stop
+          // and call apis for all containers to stop
+          break;
+      }
+
+      fs.writeFileSync(currentStatePath, state);
+      const stateLogEntry = `${new Date().toISOString()}: ${state}\n`;
+      console.log(stateLogEntry.trim());
+      // append state entry to file
+      fs.appendFileSync(stateLogPath, stateLogEntry);
+    }
   },
   getStateLog: () => {
     return fs.readFileSync(stateLogPath, { encoding: 'utf-8' }).toString();

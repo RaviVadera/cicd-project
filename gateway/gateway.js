@@ -29,16 +29,9 @@ app.put('/state', async (req, res) => {
     if (!newState) return res.status(400).send().end();
     const knownStates = Object.values(State);
     if (!knownStates.includes(newState)) return res.status(400).send().end();
-    const currentState = StateManager.getState();
-    if (currentState === newState) {
-      res.header('Content-Type', 'text/plain; charset=utf-8');
-      return res.send().end();
-    } else {
-      // TODO execute tasks for new state
-      StateManager.setState(newState);
-      res.header('Content-Type', 'text/plain; charset=utf-8');
-      return res.send().end();
-    }
+    StateManager.setState(newState);
+    res.header('Content-Type', 'text/plain; charset=utf-8');
+    return res.send().end();
   } catch (error) {
     console.log(error);
     return res.status(500).end();
