@@ -14,13 +14,6 @@ app.get('/', (req, res) => {
     res.send(message_log);
 });
 
-// re-write the log file to be empty before listening for requests
-// the listening for requests can be interpreted as health check
-// and is used to determine synchronization between containers
-console.log(`Re-writing message log file at ${messageLogPath}`);
-fs.writeFileSync(messageLogPath, '', { encoding: 'utf-8' });
-console.log(`Re-written message log file at ${messageLogPath}`);
-
 // start listening for HTTP requests
 app.listen(port, () => {
     console.log(`HTTPSERV listening on port ${port}`);
