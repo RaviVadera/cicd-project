@@ -1,8 +1,7 @@
-import { expect, beforeEach, afterEach, test } from '@jest/globals';
+import { afterEach, beforeEach, expect, test } from '@jest/globals';
+import mock from 'mock-fs';
 import request from 'supertest';
 import app from '../gateway';
-import { State } from '../state-manager';
-import mock from 'mock-fs';
 
 describe('/run-log', () => {
   const expectedContent = `2022-11-23T14:58:40.345Z: INIT\n

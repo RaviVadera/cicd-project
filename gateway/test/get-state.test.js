@@ -1,8 +1,8 @@
-import { expect, beforeEach, afterEach, test } from '@jest/globals';
+import { afterEach, beforeEach, expect, test } from '@jest/globals';
+import mock from 'mock-fs';
 import request from 'supertest';
 import app from '../gateway';
 import { State } from '../state-manager';
-import mock from 'mock-fs';
 
 describe('GET /state', () => {
   const expectedContent = State.RUNNING;

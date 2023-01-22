@@ -1,4 +1,4 @@
-import { jest, expect, beforeAll, test } from '@jest/globals';
+import { beforeAll, expect, jest, test } from '@jest/globals';
 import axios from 'axios';
 import request from 'supertest';
 import app from '../gateway';

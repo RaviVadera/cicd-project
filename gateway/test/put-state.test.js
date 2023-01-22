@@ -1,8 +1,9 @@
-import { expect, beforeEach, afterEach, test } from '@jest/globals';
+import { afterEach, beforeEach, expect, jest, test } from '@jest/globals';
+import axios from 'axios';
+import mock from 'mock-fs';
 import request from 'supertest';
 import app from '../gateway';
 import { State } from '../state-manager';
-import mock from 'mock-fs';
 
 // workaround required for an issue in iconv-lite package
 // used by boyd-parser package, used by express internally
@@ -13,10 +14,22 @@ iconv.encode("", "utf8");
 
 describe('PUT /state', () => {
   const expectedContent = State.RUNNING;
+
+  beforeAll(() => {
+    // since we are using axios to request data from HTTPSERV
+    // this may not be a good idea as changing implementation breaks tests
+    // or in worst case, provides a false image of everything good
+    const mockedResponse = {
+      status: 200,
+      headers: { 'Content-Type': 'text/plain; charset=utf-8' }
+    };
+    axios.post = jest.fn();
+    axios.post.mockResolvedValue(mockedResponse);
+  });
   
   beforeEach(() => {
     mock({
-      '/logs/state.current': Buffer.from(State.SHUTDOWN),
+      '/logs/state.current': Buffer.from(State.RUNNING),
     });
   });
 
@@ -36,7 +49,7 @@ describe('PUT /state', () => {
     const res = await request(app)
       .put('/state')
       .type('text')
-      .send(expectedContent);
+      .send(State.RUNNING);
     expect(res.statusCode).toBe(200);
     expect(res.headers).toHaveProperty('content-type');
     expect(res.headers['content-type']).toBe('text/plain; charset=utf-8');
@@ -49,20 +62,20 @@ describe('PUT /state', () => {
     expect(shutdownRes.statusCode).toBe(200);
     expect(shutdownRes.headers).toHaveProperty('content-type');
     expect(shutdownRes.headers['content-type']).toBe('text/plain; charset=utf-8');
-    expect(shutdownRes.text).toBe(State.SHUTDOWN);
+    expect(shutdownRes.text).toBe(State.RUNNING);
     expect(knownStates.includes(shutdownRes.text));
 
     const res = await request(app)
       .put('/state')
       .type('text')
-      .send(State.RUNNING);
+      .send(State.PAUSED);
     expect(res.statusCode).toBe(200);
 
     const runningRes = await request(app).get('/state').send();
     expect(runningRes.statusCode).toBe(200);
     expect(runningRes.headers).toHaveProperty('content-type');
     expect(runningRes.headers['content-type']).toBe('text/plain; charset=utf-8');
-    expect(runningRes.text).toBe(State.RUNNING);
+    expect(runningRes.text).toBe(State.PAUSED);
     expect(knownStates.includes(runningRes.text));
   });
 });
