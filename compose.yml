@@ -6,16 +6,17 @@ services:
     build: gateway/.
     volumes:
       - state_log:/logs
+      - docker:/var/run/docker.sock
     ports:
       - 8083:3000
 
 volumes:
   state_log:
   docker:
-    type: bind
-    source: /var/run/docker.sock
-    target: /var/run/docker.sock
-    read_only: true
+    driver: local
+    driver_opts:
+      device: /var/run/docker.sock
+      o: bind
 
 networks:
   default:
