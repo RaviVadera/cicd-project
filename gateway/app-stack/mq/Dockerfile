@@ -1,4 +1,4 @@
-FROM rabbitmq:3
+FROM rabbitmq:3-management
 # To prevent an issue with erlang cookie permission when deriving the rabbitmq image
 USER rabbitmq
 # Configure stage-3 healthcheck
