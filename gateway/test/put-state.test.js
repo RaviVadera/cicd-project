@@ -13,14 +13,12 @@ import iconv from 'iconv-lite';
 iconv.encode("", "utf8");
 
 describe('PUT /state', () => {
-  const expectedContent = State.RUNNING;
-
   beforeAll(() => {
     // since we are using axios to request data from HTTPSERV
     // this may not be a good idea as changing implementation breaks tests
     // or in worst case, provides a false image of everything good
     const mockedResponse = {
-      status: 200,
+      status: 204,
       headers: { 'Content-Type': 'text/plain; charset=utf-8' }
     };
     axios.post = jest.fn();
