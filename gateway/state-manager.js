@@ -1,5 +1,10 @@
 import * as fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
+import compose from 'docker-compose';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export const State = Object.freeze({
   INIT: 'INIT',
@@ -17,7 +22,7 @@ export const StateManager = {
       fs.writeFileSync(currentStatePath, '');
     return fs.readFileSync(currentStatePath, { encoding: 'utf-8' }).toString();
   },
-  setState: (state) => {
+  setState: async (state) => {
     if (StateManager.getState() !== state) {
       // TODO perform state changes
       switch (state) {
@@ -26,8 +31,19 @@ export const StateManager = {
           // maybe define http interface between all containers
           // i.e. POST /_start | POST /_stop
           // and call apis for all containers to start
-          
-          setTimeout(() => StateManager.setState(State.RUNNING), 1000);
+          try {
+            const upResult = await compose.upAll({
+              cwd: path.join(__dirname, 'app-stack'),
+              log: true,
+              executablePath: 'docker',
+              composeOptions: ['compose'],
+              commandOptions: ['--build', '--wait'],
+            });
+            console.log({ upResult });
+            await StateManager.setState(State.RUNNING);
+          } catch (e) {
+            await StateManager.setState(State.SHUTDOWN);
+          }
           break;
 
         case State.RUNNING:
@@ -43,6 +59,13 @@ export const StateManager = {
           // maybe define http interface between all containers
           // i.e. POST /_start | POST /_stop
           // and call apis for all containers to stop
+          await compose.down({
+            cwd: path.join(__dirname, 'app-stack'),
+            log: true,
+            executablePath: 'docker',
+            composeOptions: ['compose'],
+            commandOptions: [['--timeout', '100']]
+          });
           break;
       }
 
@@ -53,7 +76,7 @@ export const StateManager = {
     }
   },
   getStateLog: () => {
-    if (!fs.existsSync(stateLogPath)) fs.writeFileSync(stateLogPath , '');
+    if (!fs.existsSync(stateLogPath)) fs.writeFileSync(stateLogPath, '');
     return fs.readFileSync(stateLogPath, { encoding: 'utf-8' }).toString();
   },
 };

@@ -42,6 +42,6 @@ app.post("/stop", (req, res) => {
 
 // start listening for HTTP requests
 app.listen(port, () => {
-  scheduledTask.start();
+  //scheduledTask.start();
   console.log(`ORIG listening on port ${port}`);
 });
