@@ -30,19 +30,17 @@ export const StateManager = {
       switch (state) {
         case State.INIT:
           // TODO start all containers ??
-          // maybe define http interface between all containers
-          // i.e. POST /_start | POST /_stop
-          // and call apis for all containers to start
           try {
-            const upResult = await compose.upAll({
+            await compose.upAll({
               cwd: path.join(__dirname, 'app-stack'),
               log: true,
               executablePath: 'docker',
               composeOptions: ['compose'],
               commandOptions: ['--build', '--wait'],
             });
-            console.log({ upResult });
-            await StateManager.setState(State.RUNNING);
+            setTimeout(async () => {
+              await StateManager.setState(State.RUNNING);
+            }, 1000);
           } catch (e) {
             await StateManager.setState(State.SHUTDOWN);
           }
@@ -64,9 +62,6 @@ export const StateManager = {
 
         case State.SHUTDOWN:
           // TODO stop all containers ??
-          // maybe define http interface between all containers
-          // i.e. POST /_start | POST /_stop
-          // and call apis for all containers to stop
           await compose.down({
             cwd: path.join(__dirname, 'app-stack'),
             log: true,
