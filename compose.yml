@@ -6,7 +6,8 @@ services:
     build: gateway/.
     volumes:
       - state_log:/logs
-      - docker:/var/run
+      - docker_host:/var/run
+      - message_log:/message_logs
     ports:
       - 8083:3000
 
@@ -14,7 +15,7 @@ volumes:
   state_log:
   message_log:
     name: message_log
-  docker:
+  docker_host:
     driver: local
     driver_opts:
       type: none
