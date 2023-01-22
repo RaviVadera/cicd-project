@@ -12,6 +12,7 @@ services:
 
 volumes:
   state_log:
+  message_log:
   docker:
     driver: local
     driver_opts:
