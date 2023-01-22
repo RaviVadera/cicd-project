@@ -15,6 +15,7 @@ volumes:
   docker:
     driver: local
     driver_opts:
+      type: auto
       device: /var/run/docker.sock
       o: bind
 
