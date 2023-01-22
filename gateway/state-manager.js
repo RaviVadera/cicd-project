@@ -1,7 +1,8 @@
+import axios from 'axios';
+import compose from 'docker-compose';
 import * as fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import compose from 'docker-compose';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -15,6 +16,7 @@ export const State = Object.freeze({
 
 const currentStatePath = path.join('/logs', 'state.current');
 const stateLogPath = path.join('/logs', 'state.log');
+const origHost = 'http://orig:3000';
 
 export const StateManager = {
   getState: () => {
@@ -48,10 +50,16 @@ export const StateManager = {
 
         case State.RUNNING:
           // TODO call ORIG api to start sending messages
+          const startResponse = await axios.get(`${origHost}/start`);
+          if (startResponse.status !== 200)
+            return;
           break;
 
         case State.PAUSED:
           // TODO call ORIG api to stop sending messages
+          const stopResponse = await axios.get(`${origHost}/stop`);
+          if (stopResponse.status !== 200)
+            return;
           break;
 
         case State.SHUTDOWN:
