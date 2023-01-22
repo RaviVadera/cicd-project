@@ -18,7 +18,7 @@ app.get('/messages', async (req, res) => {
     });
     return res.send(serviceResponse.data).end();
   } catch (error) {
-    return res.status(500).end();
+    return res.status(502).end();
   }
 });
 

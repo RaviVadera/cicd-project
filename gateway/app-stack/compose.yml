@@ -42,15 +42,10 @@ services:
       mq:
         condition: service_healthy
 
-  gateway:
-    build: gateway/.
-    volumes:
-      - state_log:/logs
-    ports:
-      - 8083:3000
-    depends_on:
-      - orig
-
 volumes:
   message_log:
-  state_log:
+
+networks:
+  default:
+    name: common_network
+    external: true

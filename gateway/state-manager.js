@@ -13,6 +13,8 @@ const stateLogPath = path.join('/logs', 'state.log');
 
 export const StateManager = {
   getState: () => {
+    if (!fs.existsSync(currentStatePath))
+      fs.writeFileSync(currentStatePath, '');
     return fs.readFileSync(currentStatePath, { encoding: 'utf-8' }).toString();
   },
   setState: (state) => {
@@ -24,6 +26,7 @@ export const StateManager = {
           // maybe define http interface between all containers
           // i.e. POST /_start | POST /_stop
           // and call apis for all containers to start
+          
           setTimeout(() => StateManager.setState(State.RUNNING), 1000);
           break;
 
@@ -50,6 +53,7 @@ export const StateManager = {
     }
   },
   getStateLog: () => {
+    if (!fs.existsSync(stateLogPath)) fs.writeFileSync(stateLogPath , '');
     return fs.readFileSync(stateLogPath, { encoding: 'utf-8' }).toString();
   },
 };
