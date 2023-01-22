@@ -50,14 +50,14 @@ export const StateManager = {
 
         case State.RUNNING:
           // TODO call ORIG api to start sending messages
-          const startResponse = await axios.get(`${origHost}/start`);
+          const startResponse = await axios.post(`${origHost}/start`);
           if (startResponse.status !== 200)
             return;
           break;
 
         case State.PAUSED:
           // TODO call ORIG api to stop sending messages
-          const stopResponse = await axios.get(`${origHost}/stop`);
+          const stopResponse = await axios.post(`${origHost}/stop`);
           if (stopResponse.status !== 200)
             return;
           break;
