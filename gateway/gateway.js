@@ -72,11 +72,15 @@ app.get('/node-statistic', async (req, res) => {
         password: 'guest',
       },
     });
-    res.status(serviceResponse.status);
-    Object.keys(serviceResponse.headers).forEach((serviceHeader) => {
-      res.header(serviceHeader, serviceResponse.headers[serviceHeader]);
-    });
-    return res.send(serviceResponse.data).end();
+    const responseToSend = {
+      mem_alarm: serviceResponse.data['mem_alarm'],
+      disk_free_alarm: serviceResponse.data['disk_free_alarm'],
+      uptime: serviceResponse.data['uptime'],
+      proc_used: serviceResponse.data['proc_used'],
+      proc_total: serviceResponse.data['proc_total'],
+    };
+    res.header('Content-Type', 'application/json; charset=utf-8');
+    return res.send(responseToSend).end();
   } catch (error) {
     return res.status(502).end();
   }
