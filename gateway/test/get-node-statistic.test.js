@@ -4,13 +4,15 @@ import request from 'supertest';
 import app from '../gateway';
 
 describe('GET /node-statistic', () => {
-  const expectedContent = {
-    mem_alarm: false,
-    disk_free_alarm: false,
-    uptime: 136296,
-    proc_used: 447,
-    sockets_used: 3,
-  };
+  const expectedContent = [
+    {
+      mem_alarm: false,
+      disk_free_alarm: false,
+      uptime: 136296,
+      proc_used: 447,
+      sockets_used: 3,
+    },
+  ];
 
   beforeAll(() => {
     // since we are using axios to request data from HTTPSERV
@@ -42,6 +44,6 @@ describe('GET /node-statistic', () => {
     expect(res.statusCode).toBe(200);
     expect(res.headers).toHaveProperty('content-type');
     expect(res.headers['content-type']).toBe('application/json; charset=utf-8');
-    expect(res.body).toEqual(expectedContent);
+    expect(res.body).toEqual(expectedContent[0]);
   });
 });
