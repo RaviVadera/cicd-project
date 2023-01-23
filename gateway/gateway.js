@@ -4,6 +4,7 @@ import { State, StateManager } from './state-manager.js';
 
 const app = express();
 const messagesHost = 'http://httpserv:3000';
+const mqManagementHost = 'http://mq:15672';
 
 //app.use(bodyParserErrorHandler());
 app.use(express.text());
@@ -63,6 +64,24 @@ app.get('/run-log', async (req, res) => {
 });
 
 // TODO return rabbitmq statistics
+app.get('/node-statistic', async (req, res) => {
+  try {
+    const serviceResponse = await axios.get(`${mqManagementHost}/api/nodes`, {
+      auth: {
+        username: 'guest',
+        password: 'guest',
+      },
+    });
+    res.status(serviceResponse.status);
+    Object.keys(serviceResponse.headers).forEach((serviceHeader) => {
+      res.header(serviceHeader, serviceResponse.headers[serviceHeader]);
+    });
+    return res.send(serviceResponse.data).end();
+  } catch (error) {
+    return res.status(502).end();
+  }
+});
+
 // TODO return rabbitmq queue statistics
 
 export default app;
