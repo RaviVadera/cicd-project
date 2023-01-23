@@ -4,7 +4,13 @@ import request from 'supertest';
 import app from '../gateway';
 
 describe('GET /node-statistic', () => {
-  const expectedContent = ``;
+  const expectedContent = `{
+    "mem_alarm": false,
+    "disk_free_alarm": false,
+    "uptime": 136296,
+    "proc_used": 447,
+    "proc_total": 1048576
+  }`;
 
   beforeAll(() => {
     // since we are using axios to request data from HTTPSERV
