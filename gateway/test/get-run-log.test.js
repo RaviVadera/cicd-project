@@ -3,7 +3,7 @@ import mock from 'mock-fs';
 import request from 'supertest';
 import app from '../gateway';
 
-describe('/run-log', () => {
+describe('GET /run-log', () => {
   const expectedContent = `2022-11-23T14:58:40.345Z: INIT\n
     2022-11-23T14:58:41.348Z: RUNNING\n
     2022-11-23T14:58:43.349Z: PAUSED\n

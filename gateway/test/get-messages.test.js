@@ -3,7 +3,7 @@ import axios from 'axios';
 import request from 'supertest';
 import app from '../gateway';
 
-describe('/messages', () => {
+describe('GET /messages', () => {
   const expectedContent = `2022-11-23T14:58:40.345Z 1 MSG_1 to compse140.o\n
     2022-11-23T14:58:41.348Z 2 Got MSG_1 to compse140.i\n
     2022-11-23T14:58:43.349Z 3 MSG_2 to compse140.o\n
