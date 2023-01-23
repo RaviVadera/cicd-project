@@ -66,26 +66,31 @@ app.get('/run-log', async (req, res) => {
 // TODO return rabbitmq statistics
 app.get('/node-statistic', async (req, res) => {
   try {
-    const serviceResponse = await axios.get(`${mqManagementHost}/api/overview`, {
+    const serviceResponse = await axios.get(`${mqManagementHost}/api/nodes`, {
       auth: {
         username: 'guest',
         password: 'guest',
       },
     });
-    res.status(serviceResponse.status);
-    Object.keys(serviceResponse.headers).forEach((serviceHeader) => {
-      res.header(serviceHeader, serviceResponse.headers[serviceHeader]);
-    });
-    return res.send(serviceResponse.data).end();
-    // const responseToSend = {
-    //   mem_alarm: serviceResponse.data['mem_alarm'],
-    //   disk_free_alarm: serviceResponse.data['disk_free_alarm'],
-    //   uptime: serviceResponse.data['uptime'],
-    //   proc_used: serviceResponse.data['proc_used'],
-    //   sockets_used: serviceResponse.data['sockets_used'],
-    // };
-    // res.header('Content-Type', 'application/json; charset=utf-8');
-    // return res.send(responseToSend).end();
+    // res.status(serviceResponse.status);
+    // Object.keys(serviceResponse.headers).forEach((serviceHeader) => {
+    //   res.header(serviceHeader, serviceResponse.headers[serviceHeader]);
+    // });
+    // return res.send(serviceResponse.data).end();
+    // assuming the mq cluster has only one node
+    // since no specific requirements were provided
+    // on how to handle the metrics for multi-node cluster
+    // this should suffice the needs for the project
+    const firstNodeData = serviceResponse.data[0];
+    const responseToSend = {
+      mem_alarm: firstNodeData['mem_alarm'],
+      disk_free_alarm: firstNodeData['disk_free_alarm'],
+      uptime: firstNodeData['uptime'],
+      proc_used: firstNodeData['proc_used'],
+      sockets_used: firstNodeData['sockets_used'],
+    };
+    res.header('Content-Type', 'application/json; charset=utf-8');
+    return res.send(responseToSend).end();
   } catch (error) {
     return res.status(502).end();
   }
