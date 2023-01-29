@@ -27,7 +27,9 @@ job-test:
     - echo "Testing..."
     - npm test
 
-sonarqube-check:
+job-static-analysis:
+  stage: test
+  needs: [job-build]
   image: 
     name: sonarsource/sonar-scanner-cli:latest
     entrypoint: [""]
@@ -48,7 +50,7 @@ job-deploy:
   stage: deploy
   before_script:
     - *setup_docker_cli
-  needs: [job-test]
+  needs: [job-test, job-static-analysis]
   script:
     - echo "Deploying..."
     - docker compose up -d --build --wait
