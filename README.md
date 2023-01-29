@@ -51,6 +51,23 @@ docker exec -it gitlab-runner gitlab-runner register --non-interactive --executo
     - Go to Settings -> CI / CD -> Scroll to Runners -> Click on Expand
     - The runner should show up
 
+## Setup SonarQube
+1. Start SonarQube Container
+```
+docker run -d --name sonarqube --restart always -e SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true -p 9000:9000 sonarqube:latest
+```
+2. Login with default credentials at http://localhost:9000
+ - Username: admin
+ - Password: admin
+3. Change the password for account and relogin
+4. Create a new project
+ - Setup manually
+ - give a name for the project
+ - main branch should be set as ```project```
+5. Setup Analysis with GitLab CI
+ - Follow the steps provided from SonarQube admin
+ - Update the ```sonar-project.properties``` file with your configuration
+
 ## Create Pipeline
 
 ## Information about host
