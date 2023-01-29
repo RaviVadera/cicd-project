@@ -26,6 +26,7 @@ job-test:
     - npm ci
     - echo "Testing..."
     - npm test
+    - cd ..
 
 job-static-analysis:
   stage: test
@@ -53,4 +54,5 @@ job-deploy:
   needs: [job-static-analysis]
   script:
     - echo "Deploying..."
+    - cd gateway/
     - docker compose up -d --build --wait
