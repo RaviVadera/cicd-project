@@ -45,7 +45,9 @@ export const StateManager = {
               await StateManager.setState(State.RUNNING);
             }, 1000);
           } catch (e) {
-            await StateManager.setState(State.SHUTDOWN);
+            setTimeout(async () => {
+              await StateManager.setState(State.SHUTDOWN);
+            }, 1000);
           }
           break;
 

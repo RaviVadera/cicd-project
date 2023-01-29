@@ -15,7 +15,7 @@ describe('GET /node-statistic', () => {
   ];
 
   beforeAll(() => {
-    // since we are using axios to request data from HTTPSERV
+    // since we are using axios to request data
     // this may not be a good idea as changing implementation breaks tests
     // or in worst case, provides a false image of everything good
     const mockedResponse = {
@@ -45,5 +45,23 @@ describe('GET /node-statistic', () => {
     expect(res.headers).toHaveProperty('content-type');
     expect(res.headers['content-type']).toBe('application/json; charset=utf-8');
     expect(res.body).toEqual(expectedContent[0]);
+  });
+
+  test('/node-statistic endpoint should respond with HTTP 502 when rabbitmq fails', async () => {
+    const mockedResponse = {
+      status: 404,
+    };
+    axios.get = jest.fn();
+    axios.get.mockResolvedValue(mockedResponse);
+    const res = await request(app).get('/node-statistic').send();
+    expect(res.statusCode).toBe(502);
+  });
+
+  test('/node-statistic endpoint should respond with HTTP 502 when rabbitmq fails', async () => {
+    axios.get = jest.fn(() => {
+      throw new Error('Mocked Error');
+    });
+    const res = await request(app).get('/node-statistic').send();
+    expect(res.statusCode).toBe(502);
   });
 });

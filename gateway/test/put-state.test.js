@@ -3,7 +3,7 @@ import axios from 'axios';
 import mock from 'mock-fs';
 import request from 'supertest';
 import app from '../gateway';
-import { State } from '../state-manager';
+import { State, StateManager } from '../state-manager';
 
 // workaround required for an issue in iconv-lite package
 // used by boyd-parser package, used by express internally
@@ -14,7 +14,7 @@ iconv.encode("", "utf8");
 
 describe('PUT /state', () => {
   beforeAll(() => {
-    // since we are using axios to request data from HTTPSERV
+    // since we are using axios to request data
     // this may not be a good idea as changing implementation breaks tests
     // or in worst case, provides a false image of everything good
     const mockedResponse = {
@@ -75,5 +75,32 @@ describe('PUT /state', () => {
     expect(runningRes.headers['content-type']).toBe('text/plain; charset=utf-8');
     expect(runningRes.text).toBe(State.PAUSED);
     expect(knownStates.includes(runningRes.text));
+  });
+
+  test('/state endpoint should respond with HTTP 400 if new state is null', async () => {
+    const res = await request(app)
+      .put('/state')
+      .type('text')
+      .send();
+    expect(res.statusCode).toBe(400);
+  });
+
+  test('/state endpoint should respond with HTTP 400 if new state is invalid', async () => {
+    const res = await request(app)
+      .put('/state')
+      .type('text')
+      .send('test');
+    expect(res.statusCode).toBe(400);
+  });
+
+  test('/state endpoint should respond with HTTP 500 in case of unexpected error', async () => {
+    StateManager.setState = jest.fn(() => {
+      throw new Error('Mocked Error');
+    });
+    const res = await request(app)
+      .put('/state')
+      .type('text')
+      .send(State.PAUSED);
+    expect(res.statusCode).toBe(500);
   });
 });

@@ -1,8 +1,8 @@
-import { afterEach, beforeEach, expect, test } from '@jest/globals';
+import { afterEach, beforeEach, expect, jest, test } from '@jest/globals';
 import mock from 'mock-fs';
 import request from 'supertest';
 import app from '../gateway';
-import { State } from '../state-manager';
+import { State, StateManager } from '../state-manager';
 
 describe('GET /state', () => {
   const expectedContent = State.RUNNING;
@@ -37,5 +37,13 @@ describe('GET /state', () => {
     expect(res.text).toBe(expectedContent);
     const knownStates = Object.values(State);
     expect(knownStates.includes(res.text));
+  });
+
+  test('/state endpoint should respond with HTTP 500 in case of unexpected error', async () => {
+    StateManager.getState = jest.fn(() => {
+      throw new Error('Mocked Error');
+    });
+    const res = await request(app).get('/state').send();
+    expect(res.statusCode).toBe(500);
   });
 });

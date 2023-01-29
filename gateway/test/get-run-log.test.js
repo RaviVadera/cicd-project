@@ -1,7 +1,8 @@
-import { afterEach, beforeEach, expect, test } from '@jest/globals';
+import { afterEach, beforeEach, expect, jest, test } from '@jest/globals';
 import mock from 'mock-fs';
 import request from 'supertest';
 import app from '../gateway';
+import { StateManager } from '../state-manager';
 
 describe('GET /run-log', () => {
   const expectedContent = `2022-11-23T14:58:40.345Z: INIT\n
@@ -39,5 +40,13 @@ describe('GET /run-log', () => {
     expect(res.headers).toHaveProperty('content-type');
     expect(res.headers['content-type']).toBe('text/plain; charset=utf-8');
     expect(res.text).toBe(expectedContent);
+  });
+
+  test('/run-log endpoint should respond with HTTP 500 in case of unexpected error', async () => {
+    StateManager.getStateLog = jest.fn(() => {
+      throw new Error('Mocked Error');
+    });
+    const res = await request(app).get('/run-log').send();
+    expect(res.statusCode).toBe(500);
   });
 });

@@ -37,7 +37,6 @@ app.put('/state', async (req, res) => {
     res.header('Content-Type', 'text/plain; charset=utf-8');
     return res.send().end();
   } catch (error) {
-    console.log(error);
     return res.status(500).end();
   }
 });
@@ -49,7 +48,6 @@ app.get('/state', async (req, res) => {
     res.header('Content-Type', 'text/plain; charset=utf-8');
     return res.send(currentState).end();
   } catch (error) {
-    console.log(error);
     return res.status(500).end();
   }
 });
@@ -61,7 +59,6 @@ app.get('/run-log', async (req, res) => {
     res.header('Content-Type', 'text/plain; charset=utf-8');
     return res.send(stateLog).end();
   } catch (error) {
-    console.log(error);
     return res.status(500).end();
   }
 });

@@ -12,7 +12,7 @@ describe('GET /messages', () => {
     2022-11-23T14:58:47.356Z 6 Got MSG_3 to compse140.i`;
 
   beforeAll(() => {
-    // since we are using axios to request data from HTTPSERV
+    // since we are using axios to request data
     // this may not be a good idea as changing implementation breaks tests
     // or in worst case, provides a false image of everything good
     const mockedResponse = {
@@ -42,5 +42,13 @@ describe('GET /messages', () => {
     expect(res.headers).toHaveProperty('content-type');
     expect(res.headers['content-type']).toBe('text/plain; charset=utf-8');
     expect(res.text).toBe(expectedContent);
+  });
+
+  test('/messages endpoint should respond with HTTP 502 when HTTPSERV fails', async () => {
+    axios.get = jest.fn(() => {
+      throw new Error('Mocked Error');
+    });
+    const res = await request(app).get('/messages').send();
+    expect(res.statusCode).toBe(502);
   });
 });
