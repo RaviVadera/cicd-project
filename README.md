@@ -67,6 +67,7 @@ docker run -d --name sonarqube --restart always -e SONAR_ES_BOOTSTRAP_CHECKS_DIS
 5. Setup Analysis with GitLab CI
  - Follow the steps provided from SonarQube admin
  - Update the ```sonar-project.properties``` file with your configuration
+6. On next, push the static analysis should report errors in pipeline and also on the SonarQube dashboard
 
 ## Create Pipeline
 

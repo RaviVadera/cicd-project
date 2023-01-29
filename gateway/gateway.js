@@ -6,10 +6,13 @@ const app = express();
 const messagesHost = 'http://httpserv:3000';
 const mqManagementHost = 'http://mq:15672';
 
-//app.use(bodyParserErrorHandler());
 app.use(express.text());
 
-// TODO return the messages entries from HTTPSERV
+// all endpoints which act as a proxy i.e. forwarding request to another source
+// may responds with HTTP 502 when there is an error with the code / upstream
+// all other endpoints respond with HTTP 500 indicating there is an unexpected error
+
+// the messages entries from HTTPSERV
 app.get('/messages', async (req, res) => {
   try {
     const serviceResponse = await axios.get(`${messagesHost}`);
@@ -23,7 +26,7 @@ app.get('/messages', async (req, res) => {
   }
 });
 
-// TODO update the state
+// update the stack state
 app.put('/state', async (req, res) => {
   try {
     const newState = req.body;
@@ -39,7 +42,7 @@ app.put('/state', async (req, res) => {
   }
 });
 
-// TODO return the current state
+// the current state of app stack
 app.get('/state', async (req, res) => {
   try {
     const currentState = StateManager.getState();
@@ -51,7 +54,7 @@ app.get('/state', async (req, res) => {
   }
 });
 
-// TODO return state change log
+// state change log
 app.get('/run-log', async (req, res) => {
   try {
     const stateLog = StateManager.getStateLog();
@@ -63,7 +66,7 @@ app.get('/run-log', async (req, res) => {
   }
 });
 
-// TODO return rabbitmq statistics
+// rabbitmq core statistics
 app.get('/node-statistic', async (req, res) => {
   try {
     const serviceResponse = await axios.get(`${mqManagementHost}/api/nodes`, {
@@ -73,11 +76,7 @@ app.get('/node-statistic', async (req, res) => {
       },
     });
     if (serviceResponse.status !== 200) {
-      res.status(serviceResponse.status);
-      Object.keys(serviceResponse.headers).forEach((serviceHeader) => {
-        res.header(serviceHeader, serviceResponse.headers[serviceHeader]);
-      });
-      return res.send(serviceResponse.data).end();
+      return res.status(502).end();
     }
     // assuming the mq cluster has only one node
     // since no specific requirements were provided
@@ -98,7 +97,7 @@ app.get('/node-statistic', async (req, res) => {
   }
 });
 
-// TODO return rabbitmq queue statistics
+// rabbitmq queue statistics
 app.get('/queue-statistic', async (req, res) => {
   try {
     const serviceResponse = await axios.get(`${mqManagementHost}/api/queues`, {
@@ -108,12 +107,9 @@ app.get('/queue-statistic', async (req, res) => {
       },
     });
     if (serviceResponse.status !== 200) {
-      res.status(serviceResponse.status);
-      Object.keys(serviceResponse.headers).forEach((serviceHeader) => {
-        res.header(serviceHeader, serviceResponse.headers[serviceHeader]);
-      });
-      return res.send(serviceResponse.data).end();
+      return res.status(502).end();
     }
+    // extract statistic for each queue in mq
     const responseToSend = serviceResponse.data.map((queue) => ({
       name: queue.name,
       messages_delivered_recently: queue.message_stats.deliver_no_ack,

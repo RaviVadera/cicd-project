@@ -39,7 +39,7 @@ describe('GET /node-statistic', () => {
     expect(res.headers['content-type']).toBe('application/json; charset=utf-8');
   });
 
-  test('/node-statistic endpoint should respond the content from HTTPSERV', async () => {
+  test('/node-statistic endpoint should respond the content from rabbitmq', async () => {
     const res = await request(app).get('/node-statistic').send();
     expect(res.statusCode).toBe(200);
     expect(res.headers).toHaveProperty('content-type');
