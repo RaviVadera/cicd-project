@@ -41,8 +41,13 @@ job-static-analysis:
     key: "${CI_JOB_NAME}"
     paths:
       - .sonar/cache
-  script: 
-    - sonar-scanner -X
+  script:
+    - cd gateway
+    - npm ci
+    - echo "Testing..."
+    - npm test
+    - cd ..
+    - sonar-scanner
   allow_failure: true
   only:
     - project
