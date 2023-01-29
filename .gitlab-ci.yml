@@ -29,7 +29,7 @@ job-test:
 
 job-static-analysis:
   stage: test
-  needs: [job-build]
+  needs: [job-test]
   image: 
     name: sonarsource/sonar-scanner-cli:latest
     entrypoint: [""]
@@ -50,7 +50,7 @@ job-deploy:
   stage: deploy
   before_script:
     - *setup_docker_cli
-  needs: [job-test, job-static-analysis]
+  needs: [job-static-analysis]
   script:
     - echo "Deploying..."
     - docker compose up -d --build --wait
