@@ -6,6 +6,14 @@ const app = express();
 const messagesHost = 'http://httpserv:3000';
 const mqManagementHost = 'http://mq:15672';
 
+const startTime = new Date();
+let requestsCount = 0;
+
+// count total number of requests
+app.use((req, res, next) => {
+  requestsCount++;
+  next();
+});
 app.use(express.text());
 
 // all endpoints which act as a proxy i.e. forwarding request to another source
@@ -118,6 +126,23 @@ app.get('/queue-statistic', async (req, res) => {
     return res.send(responseToSend).end();
   } catch (error) {
     return res.status(502).end();
+  }
+});
+
+// state change log
+app.get('/statistic', async (req, res) => {
+  try {
+    const htmlBody = `<html>
+      <body>
+        Gateway Start Time: ${startTime}
+        Total Number of Requests Received: ${requestsCount}
+        Current Status of App Stack: ${StateManager.getState()}
+      </body>
+    </html>`;
+    res.header('Content-Type', 'text/html; charset=utf-8');
+    return res.send(htmlBody).end();
+  } catch (error) {
+    return res.status(500).end();
   }
 });
 
