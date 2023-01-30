@@ -134,9 +134,9 @@ app.get('/statistic', async (req, res) => {
   try {
     const htmlBody = `<html>
       <body>
-        Gateway Start Time: ${startTime}
-        Total Number of Requests Received: ${requestsCount}
-        Current Status of App Stack: ${StateManager.getState()}
+        Gateway Start Time: ${startTime}<br/>
+        Total Number of Requests Received: ${requestsCount}<br/>
+        Current Status of App Stack: ${StateManager.getState()}<br/>
       </body>
     </html>`;
     res.header('Content-Type', 'text/html; charset=utf-8');

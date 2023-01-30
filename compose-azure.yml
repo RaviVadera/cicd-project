@@ -1,0 +1,27 @@
+version: '3.9'
+
+services:
+
+  gateway:
+    image: <registry_name>.azurecr.io/gateway:latest
+    volumes:
+      - state_log:/logs
+      - docker_host:/var/run
+      - message_log:/message_logs
+    ports:
+      - 8083:3000
+
+volumes:
+  state_log:
+  message_log:
+    name: message_log
+  docker_host:
+    driver: local
+    driver_opts:
+      type: none
+      device: /var/run
+      o: bind
+
+networks:
+  default:
+    name: common_network
