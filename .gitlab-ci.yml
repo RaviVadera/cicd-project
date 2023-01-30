@@ -43,7 +43,6 @@ job-static-analysis:
     paths:
       - .sonar/cache
   script:
-    - ls -la
     - sonar-scanner
   allow_failure: true
   only:
