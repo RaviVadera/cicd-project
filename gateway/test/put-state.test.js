@@ -60,7 +60,7 @@ describe('PUT /state', () => {
     expect(shutdownRes.statusCode).toBe(200);
     expect(shutdownRes.headers).toHaveProperty('content-type');
     expect(shutdownRes.headers['content-type']).toBe('text/plain; charset=utf-8');
-    expect(shutdownRes.text).toBe(State.RUNNING);
+    expect(shutdownRes.text).toBe(`${State.RUNNING}\n`);
     expect(knownStates.includes(shutdownRes.text));
 
     const res = await request(app)
@@ -73,7 +73,7 @@ describe('PUT /state', () => {
     expect(runningRes.statusCode).toBe(200);
     expect(runningRes.headers).toHaveProperty('content-type');
     expect(runningRes.headers['content-type']).toBe('text/plain; charset=utf-8');
-    expect(runningRes.text).toBe(State.PAUSED);
+    expect(runningRes.text).toBe(`${State.PAUSED}\n`);
     expect(knownStates.includes(runningRes.text));
   });
 

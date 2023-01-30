@@ -34,9 +34,9 @@ describe('GET /state', () => {
     expect(res.statusCode).toBe(200);
     expect(res.headers).toHaveProperty('content-type');
     expect(res.headers['content-type']).toBe('text/plain; charset=utf-8');
-    expect(res.text).toBe(expectedContent);
+    expect(res.text).toBe(`${expectedContent}\n`);
     const knownStates = Object.values(State);
-    expect(knownStates.includes(res.text));
+    expect(knownStates.includes(res.text.trim()));
   });
 
   test('/state endpoint should respond with HTTP 500 in case of unexpected error', async () => {
