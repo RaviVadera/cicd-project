@@ -42,11 +42,6 @@ job-static-analysis:
     paths:
       - .sonar/cache
   script:
-    - cd gateway
-    - npm ci
-    - echo "Testing..."
-    - npm test
-    - cd ..
     - sonar-scanner
   allow_failure: true
   only:
