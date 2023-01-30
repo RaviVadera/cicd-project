@@ -190,8 +190,8 @@ Total number of pipeline runs - 120
 
 #### CI Pipeline Overview
 ![CI Overview](ci.png)
-![CI Overview](ci-runs.png.png)
-![Static Analysic](static-analysis.png.png)
+![CI Overview](ci-runs.png)
+![Static Analysic](static-analysis.png)
 
 #### __Failure Log from CI__
 ```bash
