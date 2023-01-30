@@ -52,7 +52,7 @@ app.put('/state', async (req, res) => {
 // the current state of app stack
 app.get('/state', async (req, res) => {
   try {
-    const currentState = StateManager.getState();
+    const currentState = `${StateManager.getState()}\n`;
     res.header('Content-Type', 'text/plain; charset=utf-8');
     return res.send(currentState).end();
   } catch (error) {
@@ -96,7 +96,7 @@ app.get('/node-statistic', async (req, res) => {
       sockets_used: firstNodeData['sockets_used'],
     };
     res.header('Content-Type', 'application/json; charset=utf-8');
-    return res.send(responseToSend).end();
+    return res.send(`${JSON.stringify(responseToSend)}\n`).end();
   } catch (error) {
     return res.status(502).end();
   }
@@ -123,7 +123,7 @@ app.get('/queue-statistic', async (req, res) => {
       messages_publishing_rate: queue.message_stats.publish_details.rate,
     }));
     res.header('Content-Type', 'application/json; charset=utf-8');
-    return res.send(responseToSend).end();
+    return res.send(`${JSON.stringify(responseToSend)}\n`).end();
   } catch (error) {
     return res.status(502).end();
   }
